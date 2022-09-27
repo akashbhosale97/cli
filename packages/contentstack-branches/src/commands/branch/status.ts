@@ -67,7 +67,7 @@ export default class Status extends Command {
 
       if (!_.isEmpty(newData)) {
         _.forEach(newData, (newFiles) => {
-          CliUx.ux.info(chalk.green(`\tnew: \t ${content.module} "${newFiles.title}" has added\n`))
+          CliUx.ux.info(chalk.green(`\tnew: \t ${content.module}: "${newFiles.title}" from has been added\n`))
         })
       }
 

@@ -6,6 +6,7 @@ const util = require('./lib/util');
 const login = require('./lib/util/login');
 const setupBranches = require('./lib/util/setup-branches');
 const { addlogs, unlinkFileLogger } = require('./lib/util/log');
+const { cliux } = require('@contentstack/cli-utilities');
 
 exports.initial = async function (config) {
   return new Promise(async function (resolve, reject) {
@@ -86,9 +87,9 @@ const singleExport = async (moduleName, types, config, branchName) => {
         iterateList = ['stack'];
       }
 
-      if (!_.includes(iterateList, 'stack')) {
-        iterateList = ['stack', ...iterateList]
-      }
+      // if (!_.includes(iterateList, 'stack')) {
+      //   iterateList = ['stack', ...iterateList]
+      // }
       
       iterateList.push(moduleName);
 
@@ -122,13 +123,15 @@ const singleExport = async (moduleName, types, config, branchName) => {
 
 const allExport = async (config, types, branchName) => {
   return new Promise(async (resolve, reject) => {
+
     try {
-      if (!_.includes(types, 'stack')) {
-        types = ['stack', ...types]
-      }
+      // if (!_.includes(types, 'stack')) {
+      //   types = ['stack', ...types]
+      // }
 
       for (const type of types) {
         const exportedModule = require('./lib/export/' + type);
+        cliux.loader("Processing branch data...")
         const result = await exportedModule.start(config, branchName)
           .catch((error) => {
             console.log(error && error.message)
@@ -146,6 +149,7 @@ const allExport = async (config, types, branchName) => {
         'success',
       );
       addlogs(config, 'The log for this is stored at ' + path.join(config.data, 'logs', 'export'), 'success');
+      cliux.loader();
       return resolve();
     } catch (error) {
       addlogs(

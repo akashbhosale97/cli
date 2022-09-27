@@ -124,15 +124,17 @@ function init(_logPath) {
   };
 }
 
-exports.addlogs = async (config, message, type) => {
-  // ignoring the type argument, as we are not using it to create a logfile anymore
-  if (type !== 'error') {
-    // removed type argument from init method
-    init(config.data).log(message);
-  } else {
-    init(config.data).error(message);
-  }
-};
+// exports.addlogs = async (config, message, type) => {
+//   // ignoring the type argument, as we are not using it to create a logfile anymore
+//   if (type !== 'error') {
+//     // removed type argument from init method
+//     init(config.data).log(message);
+//   } else {
+//     init(config.data).error(message);
+//   }
+// };
+
+exports.addlogs = async (config, message, type) => {};
 
 exports.unlinkFileLogger = () => {
   if (logger) {
