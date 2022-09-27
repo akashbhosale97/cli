@@ -104,9 +104,9 @@ ExportContentTypes.prototype = {
     let self = this;
     return new Promise(function (resolve) {
       helper.writeFile(path.join(contentTypesFolderPath, 'schema.json'), self.content_types);
-      self.content_types.forEach(function (content_type) {
-        helper.writeFile(path.join(contentTypesFolderPath, content_type.uid + '.json'), content_type);
-      });
+      // self.content_types.forEach(function (content_type) {
+      //   helper.writeFile(path.join(contentTypesFolderPath, content_type.uid + '.json'), content_type);
+      // });
       addlogs(config, chalk.green('Content type(s) exported successfully'), 'success');
       return resolve();
     });

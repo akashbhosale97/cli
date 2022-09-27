@@ -37,12 +37,14 @@ function exportEntries() {
     },
     json: true,
   };
+  this.entries = [];
 }
 
 exportEntries.prototype.start = function (credentialConfig) {
   let self = this;
   config = credentialConfig;
   entryFolderPath = path.resolve(config.data, config.branchName || '', config.modules.entries.dirName);
+  mkdirp.sync(entryFolderPath);
   localesFilePath = path.resolve(
     config.data,
     config.branchName || '',
@@ -86,6 +88,8 @@ exportEntries.prototype.start = function (credentialConfig) {
         },
       )
         .then(function () {
+          // write entries;
+          helper.writeFile(path.resolve(entryFolderPath, 'entries.json'), self.entries);
           addlogs(config, 'Entry migration completed successfully', 'success');
           return resolve();
         })
@@ -163,17 +167,16 @@ exportEntries.prototype.getEntries = function (apiDetails) {
       .find()
       .then((entriesList) => {
         // /entries/content_type_uid/locale.json
-        if (!fs.existsSync(path.join(entryFolderPath, apiDetails.content_type))) {
-          mkdirp.sync(path.join(entryFolderPath, apiDetails.content_type));
-        }
-        let entriesFilePath = path.join(entryFolderPath, apiDetails.content_type, apiDetails.locale + '.json');
-        let entries = helper.readFile(entriesFilePath);
-        entries = entries || {};
+        // if (!fs.existsSync(path.join(entryFolderPath, apiDetails.content_type))) {
+        //   mkdirp.sync(path.join(entryFolderPath, apiDetails.content_type));
+        // }
+        // let entriesFilePath = path.join(entryFolderPath, apiDetails.content_type, apiDetails.locale + '.json');
+        // let entries = helper.readFile(entriesFilePath);
+        // entries = entries || {};
         entriesList.items.forEach(function (entry) {
           invalidKeys.forEach((e) => delete entry[e]);
-          entries[entry.uid] = entry;
+          self.entries.push(entry);
         });
-        helper.writeFile(entriesFilePath, entries);
 
         if (typeof config.versioning === 'boolean' && config.versioning) {
           for (let locale in locales) {
