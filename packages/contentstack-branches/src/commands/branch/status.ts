@@ -80,7 +80,7 @@ export default class Status extends Command {
   }
 
   async export(args, flags) {
-    const cmd = ['-k', flags.apiKey, '-d', __dirname.split('src')[0] + 'contents', '--module', 'entries'];
+    const cmd = ['-k', flags.apiKey, '-d', __dirname.split('src')[0] + 'contents'];
 
     cmd.push('--branch', args.branch);
 

@@ -6,28 +6,14 @@ module.exports = {
     'https://api.contentstack.io': 'https://developerhub-api.contentstack.com',
     'https://eu-api.contentstack.com': 'https://eu-developerhub-api.contentstack.com',
     'https://azure-na-api.contentstack.com': 'https://azure-na-developerhub-api.contentstack.com',
-    'https://stag-api.csnonprod.com': 'https://stag-developerhub-api.csnonprod.com'
+    'https://stag-api.csnonprod.com': 'https://stag-developerhub-api.csnonprod.com',
   },
   // use below hosts for eu region
   // host:'https://eu-api.contentstack.com/v3',
   // use below hosts for azure-na region
   // host:'https://azure-na-api.contentstack.com/v3',
   modules: {
-    types: [
-      'stack',
-      'assets',
-      'locales',
-      'environments',
-      'extensions',
-      'webhooks',
-      'global-fields',
-      'content-types',
-      'custom-roles',
-      'workflows',
-      'entries',
-      'labels',
-      'marketplace-apps'
-    ],
+    types: ['stack', 'locales', 'content-types', 'entries'],
     locales: {
       dirName: 'locales',
       fileName: 'locales.json',
@@ -116,8 +102,8 @@ module.exports = {
     },
     marketplace_apps: {
       dirName: 'marketplace_apps',
-      fileName: 'marketplace_apps.json'
-    }
+      fileName: 'marketplace_apps.json',
+    },
   },
   languagesCode: [
     'af-za',

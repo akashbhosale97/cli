@@ -11,7 +11,7 @@ var slice = Array.prototype.slice;
 
 const ansiRegexPattern = [
   '[\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]+)*|[a-zA-Z\\d]+(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?\\u0007)',
-'(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-ntqry=><~]))'
+  '(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-ntqry=><~]))',
 ].join('|');
 
 function returnString(args) {
@@ -27,7 +27,7 @@ function returnString(args) {
       .join('  ')
       .trim();
   }
-  returnStr = returnStr.replace(new RegExp(ansiRegexPattern, 'g'), "").trim();
+  returnStr = returnStr.replace(new RegExp(ansiRegexPattern, 'g'), '').trim();
   return returnStr;
 }
 var myCustomLevels = {
@@ -77,7 +77,7 @@ function init(_logPath) {
 
     logger = winston.createLogger({
       transports: [
-        new winston.transports.File(successTransport),
+        // new winston.transports.File(successTransport),
         new winston.transports.Console({ format: winston.format.simple() }),
       ],
       levels: myCustomLevels.levels,
@@ -85,7 +85,7 @@ function init(_logPath) {
 
     errorLogger = winston.createLogger({
       transports: [
-        new winston.transports.File(errorTransport),
+        // new winston.transports.File(errorTransport),
         new winston.transports.Console({ level: 'error', format: winston.format.simple() }),
       ],
       levels: { error: 0 },
