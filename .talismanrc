@@ -1,5 +1,9 @@
 fileignoreconfig:
   - filename: package-lock.json
-    checksum: fa49d8b72d8df678f1041c4413dc544c3003d573fdc3b928726ac3ce29b9fa3f
+    checksum: 9e86f99bd79092b4db6c18928f507fc5f937dbc3e40aef487d620ca007a3aead
     ignore_detectors: [filecontent]
+  - filename: packages/contentstack-migration/examples/branch/utils/index.js
+    checksum: 0b76c64d22b7d3673a99aa046a624bc32ddb35acb4eac678520d4a31e9de13a5
+  - filename: packages/contentstack-migration/examples/branch/03-migrate-new-entries.js
+    checksum: 538613a1fa595a6894def88b4ef70f0bc7d6fd06a4ca58ff952ded322d04b485
     version: ''
