@@ -343,5 +343,6 @@ module.exports = {
     webhooks: '/webhooks/',
     stacks: '/stacks/',
   },
-  preserveStackVersion: false
+  preserveStackVersion: false,
+  enableBranchStatus: true
 };

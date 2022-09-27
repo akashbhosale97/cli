@@ -7,16 +7,15 @@
 const fs = require('fs');
 const path = require('path');
 const _ = require('lodash');
-const Promise = require('bluebird');
-const chalk = require('chalk');
+const dayjs = require('dayjs')
 const mkdirp = require('mkdirp');
-const { addlogs } = require('../util/log');
+const Promise = require('bluebird');
 
 const helper = require('../util/helper');
-const log = require('../util/log');
+const { addlogs } = require('../util/log');
+let config = require('../../config/default');
 const stack = require('../util/contentstack-management-sdk');
 
-let config = require('../../config/default');
 let entriesConfig = config.modules.entries;
 let invalidKeys = entriesConfig.invalidKeys;
 let limit = entriesConfig.limit;
@@ -138,6 +137,32 @@ exportEntries.prototype.getEntry = function (apiDetails) {
   });
 };
 
+exportEntries.prototype.setBranchStatus = function (entries) {
+  const currentBranch = _.find(config.branches, { uid: config.branchName })
+
+  if (_.isEmpty(config.branchStatus)) {
+    config.branchStatus = {}
+  }
+
+  if (_.isEmpty(config.branchStatus.entries)) {
+    config.branchStatus.entries = {}
+  }
+
+  _.forEach(entries, (entry) => {
+    const { title, uid, description } = _.find(content_types, { uid: entry.content_type_uid }) || {}
+
+    if (config.branchStatus.entries && _.isEmpty(config.branchStatus.entries[entry.uid])) {
+      if (dayjs(entry.created_at).diff(currentBranch.created_at, 'second') >= 0) {
+        // NOTE New entry
+        config.branchStatus.entries[entry.uid] = { change_type: 'new', title: entry.title, entry, content_type: { title, uid, description } }
+      } else if  (dayjs(entry.updated_at).diff(currentBranch.created_at, 'second') >= 0) {
+        // NOTE old entry updated
+        config.branchStatus.entries[entry.uid] = { change_type: 'modified', title: entry.title, entry, content_type: { title, uid, description } }
+      }
+    }
+  })
+}
+
 exportEntries.prototype.getEntries = function (apiDetails) {
   let self = this;
   return new Promise(function (resolve, reject) {
@@ -145,7 +170,7 @@ exportEntries.prototype.getEntries = function (apiDetails) {
       apiDetails.skip = 0;
     }
 
-    let queryrequestObject = {
+    let queryRequestObject = {
       locale: apiDetails.locale,
       skip: apiDetails.skip,
       limit: limit,
@@ -155,17 +180,28 @@ exportEntries.prototype.getEntries = function (apiDetails) {
         locale: apiDetails.locale,
       },
     };
+
+    if (config.enableBranchStatus) {
+      const currentBranch = _.find(config.branches, { uid: config.branchName })
+      queryRequestObject.query['updated_at'] = { $gt: currentBranch.created_at }
+      // queryRequestObject['title'] = 'Title updated 1'
+    }
+
     client
       .stack({ api_key: config.source_stack, management_token: config.management_token })
       .contentType(apiDetails.content_type)
       .entry()
-      .query(queryrequestObject)
+      .query(queryRequestObject)
       .find()
       .then((entriesList) => {
-        // /entries/content_type_uid/locale.json
+        if (!_.isEmpty(entriesList.items)) {
+          self.setBranchStatus(entriesList.items)
+        }
+
         if (!fs.existsSync(path.join(entryFolderPath, apiDetails.content_type))) {
           mkdirp.sync(path.join(entryFolderPath, apiDetails.content_type));
         }
+
         let entriesFilePath = path.join(entryFolderPath, apiDetails.content_type, apiDetails.locale + '.json');
         let entries = helper.readFile(entriesFilePath);
         entries = entries || {};

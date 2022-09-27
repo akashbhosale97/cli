@@ -85,6 +85,11 @@ const singleExport = async (moduleName, types, config, branchName) => {
       } else {
         iterateList = ['stack'];
       }
+
+      if (!_.includes(iterateList, 'stack')) {
+        iterateList = ['stack', ...iterateList]
+      }
+      
       iterateList.push(moduleName);
 
       for (const element of iterateList) {
@@ -94,6 +99,7 @@ const singleExport = async (moduleName, types, config, branchName) => {
             console.log(error && error.message)
           });
         if (result && element === 'stack') {
+          config.stackData = result
           let master_locale = {
             master_locale: { code: result.code },
           };
@@ -117,6 +123,10 @@ const singleExport = async (moduleName, types, config, branchName) => {
 const allExport = async (config, types, branchName) => {
   return new Promise(async (resolve, reject) => {
     try {
+      if (!_.includes(types, 'stack')) {
+        types = ['stack', ...types]
+      }
+
       for (const type of types) {
         const exportedModule = require('./lib/export/' + type);
         const result = await exportedModule.start(config, branchName)
@@ -125,6 +135,7 @@ const allExport = async (config, types, branchName) => {
           });
 
         if (result && type === 'stack') {
+          config.stackData = result
           let master_locale = { master_locale: { code: result.code } };
           config = _.merge(config, master_locale);
         }

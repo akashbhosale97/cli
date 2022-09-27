@@ -45,14 +45,14 @@ ExportStack.prototype.start = async function (credentialConfig) {
     }
   }
 
-  if (!config.preserveStackVersion && !config.hasOwnProperty('master_locale')) {
+  if (!config.preserveStackVersion && !config.hasOwnProperty('master_locale') && !config.enableBranchStatus) {
     const apiDetails = {
       limit: 100,
       skip: 0,
       include_count: true,
     }
     return self.getLocales(apiDetails)
-  } else if (config.preserveStackVersion) {
+  } else if (config.preserveStackVersion || config.enableBranchStatus) {
     addlogs(config, 'Exporting stack details', 'success');
     let stackFolderPath = path.resolve(config.data, stackConfig.dirName);
     let stackContentsFile = path.resolve(stackFolderPath, stackConfig.fileName);

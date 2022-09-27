@@ -4,9 +4,11 @@
  * MIT Licensed
  */
 
-const mkdirp = require('mkdirp');
+const _ = require('lodash');
 const path = require('path');
+const dayjs = require('dayjs')
 const chalk = require('chalk');
+const mkdirp = require('mkdirp');
 const Promise = require('bluebird');
 
 const helper = require('../util/helper');
@@ -63,6 +65,29 @@ ExportContentTypes.prototype = {
         .catch(reject);
     });
   },
+  setBranchStatus: function (contentTypes) {
+    const currentBranch = _.find(config.branches, { uid: config.branchName })
+  
+    if (_.isEmpty(config.branchStatus)) {
+      config.branchStatus = {}
+    }
+
+    if (_.isEmpty(config.branchStatus.contentTypes)) {
+      config.branchStatus.contentTypes = {}
+    }
+  
+    _.forEach(contentTypes, (contentType) => {
+      if (_.isEmpty(config.branchStatus.contentTypes[contentType.uid])) {
+        if (dayjs(contentType.created_at).diff(currentBranch.created_at, 'second') >= 0) {
+          // NOTE New contentType
+          config.branchStatus.contentTypes[contentType.uid] = { change_type: 'new', contentType, title: contentType.title }
+        } else if  (dayjs(contentType.updated_at).diff(currentBranch.created_at, 'second') >= 0) {
+          // NOTE old contentType updated
+          config.branchStatus.contentTypes[contentType.uid] = { change_type: 'modified', contentType, title: contentType.title }
+        }
+      }
+    })
+  },
   getContentTypes: function (skip) {
     let self = this;
     if (typeof skip !== 'number') {
@@ -79,6 +104,10 @@ ExportContentTypes.prototype = {
         .query(self.requestOptions.qs)
         .find()
         .then((contenttypeResponse) => {
+          if (!_.isEmpty(contenttypeResponse.items)) {
+            self.setBranchStatus(contenttypeResponse.items)
+          }
+
           if (contenttypeResponse.items.length === 0) {
             addlogs(config, 'No content types were found in the Stack', 'success');
             return resolve();
