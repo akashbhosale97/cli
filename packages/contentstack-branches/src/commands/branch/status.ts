@@ -41,7 +41,7 @@ export default class Status extends Command {
     const { entries, contentTypes } = stackData
 
     if (!_.isEmpty(entries) || !_.isEmpty(contentTypes)) {
-      for (let index = 0; index < 5; index++) {
+      for (let index = 0; index < 2; index++) {
         CliUx.ux.info('\n')
       }
     }

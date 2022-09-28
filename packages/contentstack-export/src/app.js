@@ -129,9 +129,10 @@ const allExport = async (config, types, branchName) => {
       //   types = ['stack', ...types]
       // }
 
+      cliux.loader("Processing branch data...")
+
       for (const type of types) {
         const exportedModule = require('./lib/export/' + type);
-        cliux.loader("Processing branch data...")
         const result = await exportedModule.start(config, branchName)
           .catch((error) => {
             console.log(error && error.message)
@@ -149,7 +150,7 @@ const allExport = async (config, types, branchName) => {
         'success',
       );
       addlogs(config, 'The log for this is stored at ' + path.join(config.data, 'logs', 'export'), 'success');
-      cliux.loader();
+      cliux.loader("");
       return resolve();
     } catch (error) {
       addlogs(
