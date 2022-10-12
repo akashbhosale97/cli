@@ -1,9 +1,16 @@
 fileignoreconfig:
-  - filename: package-lock.json
-    checksum: 9e86f99bd79092b4db6c18928f507fc5f937dbc3e40aef487d620ca007a3aead
-    ignore_detectors: [filecontent]
-  - filename: packages/contentstack-migration/examples/branch/utils/index.js
-    checksum: 0b76c64d22b7d3673a99aa046a624bc32ddb35acb4eac678520d4a31e9de13a5
-  - filename: packages/contentstack-migration/examples/branch/03-migrate-new-entries.js
-    checksum: 538613a1fa595a6894def88b4ef70f0bc7d6fd06a4ca58ff952ded322d04b485
-    version: ''
+
+- filename: package-lock.json
+  checksum: 9e86f99bd79092b4db6c18928f507fc5f937dbc3e40aef487d620ca007a3aead
+  ignore_detectors: [filecontent]
+- filename: packages/contentstack-bulk-publish/src/util/index.js
+  checksum: 6b9bc7ae10df7d5d3f1067aa5226a867e6ed6fff63d2d61f2932ba612811df9b
+- filename: packages/contentstack-import/src/lib/util/lookupReplaceEntries.js
+  checksum: f555b4df51228a7706c0b38f1ac10ee2e44617642921c7a687aefdf6972d5f14
+- filename: packages/contentstack-export/src/lib/export/custom-roles.js
+  checksum: 3827413f8283c816fdc9122a6610b87f863745f95b36952531d04b800c4ad16d
+- filename: packages/contentstack-import/src/lib/import/custom-roles.js
+  checksum: ce6032825adc1b755b836c3fe799a4b87d9315f898b41797981f024bb1cd582d
+- filename: packages/contentstack-bulk-publish/src/commands/cm/assets/publish.js
+  checksum: 328391c8b89323e66f3f492262e596debe3e17cf9dd30a8c8c87d9e9bab2c608
+  version: ''
