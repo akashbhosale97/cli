@@ -35,7 +35,7 @@
     "@contentstack/cli-migration": "^1.0.4",
     "@contentstack/cli-utilities": "^1.0.5",
     "@contentstack/management": "^1.6.0",
-    "@oclif/core": "^1.21.0",
+    "@oclif/core": "^2.0.10",
     "@oclif/plugin-help": "^5",
     "@oclif/plugin-not-found": "^2.3.9",
     "@oclif/plugin-plugins": "^2.1.7",

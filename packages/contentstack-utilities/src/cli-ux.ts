@@ -1,6 +1,7 @@
 import chalk from 'chalk';
+import { Options, SingleBar } from 'cli-progress';
+import { Command, Flags, Args, ux } from '@oclif/core';
 import { default as inquirer, QuestionCollection } from 'inquirer';
-import { ux as cliux, Table } from '@oclif/core/lib/cli-ux';
 
 import messageHandler from './message-handler';
 import { PrintOptions, InquirePayload, CliUXPromptOptions } from './interfaces';
@@ -15,44 +16,44 @@ class CLIInterface {
     this.loading = false;
   }
 
-  get uxTable(): typeof Table.table {
-    return cliux.table;
+  get uxTable(): typeof ux.Table.table {
+    return ux.table;
   }
 
   init(context) {}
 
   print(message: string, opts?: PrintOptions): void {
     if (opts && opts.color) {
-      cliux.log(chalk[opts.color](messageHandler.parse(message)));
+      ux.log(chalk[opts.color](messageHandler.parse(message)));
       return;
     }
 
-    cliux.log(messageHandler.parse(message));
+    ux.log(messageHandler.parse(message));
   }
 
   success(message: string): void {
-    cliux.log(chalk.green(messageHandler.parse(message)));
+    ux.log(chalk.green(messageHandler.parse(message)));
   }
 
   error(message: string, ...params: any): void {
-    cliux.log(chalk.red(messageHandler.parse(message) + (params && params.length > 0 ? ': ' : '')), ...params);
+    ux.log(chalk.red(messageHandler.parse(message) + (params && params.length > 0 ? ': ' : '')), ...params);
   }
 
   loader(message: string = ''): void {
     if (!this.loading) {
-      cliux.action.start(messageHandler.parse(message));
+      ux.action.start(messageHandler.parse(message));
     } else {
-      cliux.action.stop(messageHandler.parse(message));
+      ux.action.stop(messageHandler.parse(message));
     }
     this.loading = !this.loading;
   }
 
   table(
     data: Record<string, unknown>[],
-    columns: Table.table.Columns<Record<string, unknown>>,
-    options?: Table.table.Options,
+    columns: ux.Table.table.Columns<Record<string, unknown>>,
+    options?: ux.Table.table.Options,
   ): void {
-    cliux.table(data, columns, options);
+    ux.table(data, columns, options);
   }
 
   async inquire<T>(inquirePayload: InquirePayload): Promise<T> {
@@ -62,17 +63,18 @@ class CLIInterface {
     return result[inquirePayload.name] as T;
   }
 
-  prompt(name: string, options?: CliUXPromptOptions): Promise<any> {
-    return cliux.prompt(name, options);
+  prompt(name: string, options?: CliUXPromptOptions): Promise<string> {
+    return ux.prompt(name, options);
   }
 
   confirm(message?: string): Promise<boolean> {
-    return cliux.confirm(message);
+    return ux.confirm(message);
   }
 
-  progress(options?: any): any {
-    return cliux.progress(options);
+  progress(options?: Options): SingleBar {
+    return ux.progress(options);
   }
 }
 
 export default new CLIInterface();
+export { Command, Flags, Args, ux };

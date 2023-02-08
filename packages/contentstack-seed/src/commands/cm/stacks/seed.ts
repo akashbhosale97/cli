@@ -73,7 +73,7 @@ export default class SeedCommand extends Command {
 
   static aliases = ['cm:seed'];
 
-  async run() {
+  async run(): Promise<{ api_key: string } | undefined> {
     try {
       const { flags: seedFlags } = await this.parse(SeedCommand);
 

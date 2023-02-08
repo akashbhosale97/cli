@@ -92,8 +92,10 @@ export default class Bootstrap {
       if (this.options.seedParams.yes) {
         cmd.push('-y', this.options.seedParams.yes);
       }
-      const result = await ContentStackSeed.run(cmd);
-      if (result.api_key) {
+
+      const result = (await ContentStackSeed.run(cmd)) as { api_key: string } | undefined;
+
+      if (result && result.api_key) {
         await setupEnvironments(
           this.managementAPIClient,
           result.api_key,

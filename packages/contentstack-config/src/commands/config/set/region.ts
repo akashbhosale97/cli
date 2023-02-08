@@ -1,5 +1,6 @@
 import { Command, flags as _flags } from '@contentstack/cli-command';
-import { cliux, logger, printFlagDeprecation } from '@contentstack/cli-utilities';
+import { Args, cliux, logger, printFlagDeprecation } from '@contentstack/cli-utilities';
+
 import { Region } from '../../../interfaces';
 import { regionHandler, interactive } from '../../../utils';
 
@@ -34,11 +35,15 @@ export default class RegionSetCommand extends Command {
     '$ csdx config:set:region --cma <contentstack_cma_endpoint> --cda <contentstack_cda_endpoint> --name "India"',
   ];
 
-  static args = [
-    {
-      name: 'region',
-    },
-  ];
+  // static args = [
+  //   {
+  //     name: 'region',
+  //   },
+  // ];
+
+  static args = {
+    region: Args.string({ description: 'an argument', required: true }),
+  };
 
   async run() {
     const { args, flags: regionSetFlags } = await this.parse(RegionSetCommand);

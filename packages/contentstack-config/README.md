@@ -26,7 +26,7 @@ USAGE
 # Commands
 <!-- commands -->
 * [`csdx config:get:region`](#csdx-configgetregion)
-* [`csdx config:set:region [REGION]`](#csdx-configsetregion-region)
+* [`csdx config:set:region REGION`](#csdx-configsetregion-region)
 
 ## `csdx config:get:region`
 
@@ -45,13 +45,16 @@ EXAMPLES
 
 _See code: [src/commands/config/get/region.ts](https://github.com/contentstack/cli/blob/main/packages/contentstack-config/src/commands/config/get/region.ts)_
 
-## `csdx config:set:region [REGION]`
+## `csdx config:set:region REGION`
 
 Set region for CLI
 
 ```
 USAGE
   $ csdx config:set:region [REGION] [-d <value> -m <value> -n <value>]
+
+ARGUMENTS
+  REGION  an argument
 
 FLAGS
   -d, --cda=<value>   Custom host to set for content delivery API, if this flag is added then cma and name flags are
